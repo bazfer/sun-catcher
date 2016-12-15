@@ -2,15 +2,37 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><!--TEMPLATED--></title>
+	<title>Geoloc Sunrise Sunset</title>
 	
 	<!--BOOTSTRAP-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<!--CUSTOM CSS-->
-	<link rel="stylesheet" type="text/css" href="assets/styles/style.css">
+	<link rel="stylesheet" href="assets/styles/style.css">
 </head>
 
 <body>
+	<!--GOOGLE MAPS-->
+	<div class="page-header">
+  		<h1><small>Google Maps</small></h1>
+	</div>
+ 	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+
+	<div id="map" ></div>
+	
+	<!--SUNRISE SUNSET-->
+	<div class="page-header">
+  		<h1><small>Sunrise Sunset</small></h1>
+	</div>
+	<div class="panel panel-default">
+  		<div class="panel-heading"></div>
+  		<div class="panel-body"></div>
+	
+		<div class="list-group-item" id="sunrise"></div>
+		<div class="list-group-item" id="sunset"></div>
+		<div class="list-group-item" id="solar_noon"></div>
+		<div class="list-group-item" id="day_length"></div>
+		
+	 </div>
 
 	<!--FIREBASE-->
     <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>	

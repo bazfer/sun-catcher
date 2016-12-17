@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 	<meta charset="UTF-8">
 	<title>Geoloc Sunrise Sunset</title>
 
@@ -18,10 +19,9 @@
 	<!--GOOGLE MAPS-->
 	<div class="page-header">
   		<h1><small>Google Maps</small></h1>
-	</div>
- 	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
 
-	<div id="map" ></div>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="map"></div>
 	
 	<!--SUNRISE SUNSET-->
 	<div class="page-header">
@@ -37,16 +37,16 @@
 		<div class="list-group-item" id="day_length"></div>
 		
 	 </div>
-
+	<!--JQUERY-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	 <!--MATERIALIZE JS -->
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script> 
 	<!--FIREBASE-->
     <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>	
-	<!--JQUERY-->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	<!--MATHJS-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.7.0/math.min.js"></script>
 	<!--CUSTOM JS-->
 	<script type="text/javascript" src="assets/scripts/script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-v-7mR5Rs0s1dGKX4pEbfvp6aImogy4E&libraries=places&callback=initAutocomplete"async defer></script>
 </body>
 </html>

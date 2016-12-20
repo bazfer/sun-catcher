@@ -16,9 +16,22 @@
 </head>
 
 <body>
+	<div class="page-header" id="loginStatus">
+	</div>
+	<div class="panel panel-primary" id="login">
+		<div class="page-header">
+			<h1><small>Login</small></h1>
+		</div>
+		<div class="panel-body">
+			<form role="form">
+				<div class="form-group">
+					<label for="search"></label>
+					<input type="text" class="form-control" id="username">
+				</div>
 
-	<div class="page-header">
-		<h1><small>Login</small>
+				<button type="submit" class="btn btn-default" id="submitUsernameButton"></i>Submit</button>
+			</form>
+		</div>
 	</div>
 	<div class="page-header">
 		<h1><small>Previously Searched Locations</small></h1>
@@ -27,6 +40,7 @@
 		<div class="panel-body">
 			<table class="table" id="previousSearches">
 				<tr>
+					<th>User</th>
 					<th>Latitude</th>
 					<th>Longitude</th>
 				</tr>

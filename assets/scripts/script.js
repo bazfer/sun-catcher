@@ -15,14 +15,13 @@ var googleAPIKey = "AIzaSyD-v-7mR5Rs0s1dGKX4pEbfvp6aImogy4E";
 var latitude = 30.2672; 
 var longitude = -97.7431;
 var date = "today";
-var inputLocation = "";
-var offset;
+var currentUser = "Guest";
 
 
 function getData() {
 	database.ref().on("child_added", function(snapshot) {
 		var data = snapshot.val();
-		$("#previousSearches").append("<tr><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>")
+		$("#previousSearches").append("<tr><td>" + data.user + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>")
 	});
 }
 function getSolarTimes() {
@@ -35,7 +34,7 @@ function getSolarTimes() {
 
 	$.ajax({ url: timezoneURL, method: "GET" }).done(function(response) {
 
-		offset = (response.rawOffset + response.dstOffset)/3600;
+		var offset = (response.rawOffset + response.dstOffset)/3600;
 
 		$.ajax({ url: solarQueryURL, method: "GET" }).done(function(response) {
 			var solarData = response.results;
@@ -53,8 +52,9 @@ function getSolarTimes() {
 	});
 };
 
-function storeLocation() {
+function storeData() {
 	database.ref().push( {
+		user: currentUser,
 		latitude: latitude,
 		longitude: longitude
 	})
@@ -103,7 +103,7 @@ function initAutocomplete() {
 			latitude = ((place.geometry.viewport.f.f + place.geometry.viewport.f.b)/2);
 			longitude = ((place.geometry.viewport.b.f + place.geometry.viewport.b.b)/2);
 			getSolarTimes();
-			storeLocation();
+			storeData();
 			var icon = {
 				url: place.icon,
 				size: new google.maps.Size(71, 71),
@@ -132,6 +132,20 @@ function initAutocomplete() {
 }
 
 $(document).ready(function() {
+	$(document).on("click", "#submitUsernameButton", function(event) {
+		event.preventDefault();
+		currentUser = $("#username").val().trim();
+		$("#username").val("");
+		$("#login").hide();
+		$("#loginStatus").html("<h3><small>You are currently logged in as: " + currentUser + "</small></h3><button id='changeUserButton'>Login as a Different User</button>");
+	});
+
+	$(document).on("click", "#changeUserButton", function() {
+		$("#changeUserButton").remove();
+		$("#login").show();
+	});
+
+	$("#loginStatus").html("<h3><small>You are currently not logged in.</small></h3>");
 	getData();
 	getSolarTimes();
 });

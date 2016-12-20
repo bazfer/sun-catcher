@@ -1,36 +1,64 @@
 // common data among ajax calls - this will give us a natural existing connection between two APIs, 
 // rather than forcing it
+  // Initialize Firebase
+var config = {
+apiKey: "AIzaSyCu_KaOTFf1ZdH-yamzF9okHFTYkXj-maI",
+authDomain: "project1-2ec2e.firebaseapp.com",
+databaseURL: "https://project1-2ec2e.firebaseio.com",
+storageBucket: "project1-2ec2e.appspot.com",
+messagingSenderId: "446413217477"
+};
+firebase.initializeApp(config);
+database = firebase.database();
 
+var googleAPIKey = "AIzaSyD-v-7mR5Rs0s1dGKX4pEbfvp6aImogy4E";
 var latitude = 30.2672; 
 var longitude = -97.7431;
+var date = "today";
+var inputLocation = "";
+var offset;
 
 
-
-
+function getData() {
+	database.ref().on("child_added", function(snapshot) {
+		var data = snapshot.val();
+		$("#previousSearches").append("<tr><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>")
+	});
+}
 function getSolarTimes() {
 
-	// sunrises and other time date based on coordinates
+	var timestamp = moment().unix();
 
-	queryURL2 = "http://api.sunrise-sunset.org/json?lat=" + latitude + "&lng=" + longitude + "&date=today";
+	timezoneURL = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude + "&timestamp=" + timestamp + "&key=" + googleAPIKey;
 
-	$.ajax({ url: queryURL2, method: "GET" }).done(function(response) {
-		var holdThis = response.results;
-		var sunrise = holdThis.sunrise;
-		var sunset = holdThis.sunset;
-		var solar_noon = holdThis.solar_noon;
-		var day_length = holdThis.day_length;
+	solarQueryURL = "http://api.sunrise-sunset.org/json?lat=" + latitude + "&lng=" + longitude + "&date=" + date;
 
-		$("#sunrise").html(sunrise);
-		$("#sunset").html(sunset);
-		$("#solar_noon").html(solar_noon);
-		$("#day_length").html(day_length);
+	$.ajax({ url: timezoneURL, method: "GET" }).done(function(response) {
 
+		offset = (response.rawOffset + response.dstOffset)/3600;
+
+		$.ajax({ url: solarQueryURL, method: "GET" }).done(function(response) {
+			var solarData = response.results;
+
+			var sunrise = moment(moment(solarData.sunrise, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
+			var sunset = moment(moment(solarData.sunset, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
+			var solar_noon = moment(moment(solarData.solar_noon, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
+			var day_length = solarData.day_length;
+
+			$("#sunrise").html("Sunrise: " + sunrise);
+			$("#sunset").html("Sunset: " + sunset);
+			$("#solar_noon").html("Solar Noon: " + solar_noon);
+			$("#day_length").html("Day Length: " + day_length);
+		});
 	});
 };
 
-// google maps 
-
-// var gmKey = "AIzaSyD-v-7mR5Rs0s1dGKX4pEbfvp6aImogy4E";
+function storeLocation() {
+	database.ref().push( {
+		latitude: latitude,
+		longitude: longitude
+	})
+}
 
 function initAutocomplete() {
 	var map = new google.maps.Map(document.getElementById('map'), {
@@ -75,6 +103,7 @@ function initAutocomplete() {
 			latitude = ((place.geometry.viewport.f.f + place.geometry.viewport.f.b)/2);
 			longitude = ((place.geometry.viewport.b.f + place.geometry.viewport.b.b)/2);
 			getSolarTimes();
+			storeLocation();
 			var icon = {
 				url: place.icon,
 				size: new google.maps.Size(71, 71),
@@ -103,5 +132,6 @@ function initAutocomplete() {
 }
 
 $(document).ready(function() {
+	getData();
 	getSolarTimes();
-})
+});

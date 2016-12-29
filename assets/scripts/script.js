@@ -15,8 +15,18 @@ var googleAPIKey = "AIzaSyD-v-7mR5Rs0s1dGKX4pEbfvp6aImogy4E";
 var latitude = 30.2672; 
 var longitude = -97.7431;
 var date = "today";
-var currentUser = "Guest";
+var currentUser;
+var password;
 
+function checkIfLoggedIn() {
+	currentUser = localStorage.getItem("user");
+	if (currentUser == null || currentUser == "null") {
+		$("#loginStatus").html("<h3><small>You are currently not logged in.</small></h3>");
+		currentUser = "Guest";
+	} else {
+		login();
+	}
+}
 
 function getData() {
 	database.ref().on("child_added", function(snapshot) {
@@ -52,12 +62,40 @@ function getSolarTimes() {
 	});
 };
 
+function login() {
+	$("#newUser").hide();
+	$("#login").hide();
+	$("#loginStatus").html("<h3><small>You are currently logged in as: " + currentUser + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
+}
+
+function registerUser() {
+	currentUser = $("#newUsername").val().trim();
+	password = $("#newPassword").val().trim();
+	database.ref('users/' + currentUser).set({
+		password: password
+	});
+	$("#newUsername").val("");
+	$("#newPassword").val("");
+	login();
+}
+
 function storeData() {
 	database.ref().push( {
 		user: currentUser,
 		latitude: latitude,
 		longitude: longitude
 	})
+}
+
+function submitCredentials() {
+	currentUser = $("#username").val().trim();
+	password = $("#password").val().trim();
+	localStorage.setItem("user", currentUser);
+	$("#username").val("");
+	$("#password").val("");
+	if (data.currentUser) {
+		login();
+	}
 }
 
 function initAutocomplete() {
@@ -132,20 +170,29 @@ function initAutocomplete() {
 }
 
 $(document).ready(function() {
+	checkIfLoggedIn();
+	getData();
+	getSolarTimes();
+
 	$(document).on("click", "#submitUsernameButton", function(event) {
 		event.preventDefault();
-		currentUser = $("#username").val().trim();
-		$("#username").val("");
-		$("#login").hide();
-		$("#loginStatus").html("<h3><small>You are currently logged in as: " + currentUser + "</small></h3><button id='changeUserButton'>Login as a Different User</button>");
+		submitCredentials();
 	});
 
 	$(document).on("click", "#changeUserButton", function() {
+		localStorage.setItem("user", null);
+		checkIfLoggedIn();
 		$("#changeUserButton").remove();
+		$("#newUser").show();
 		$("#login").show();
 	});
 
-	$("#loginStatus").html("<h3><small>You are currently not logged in.</small></h3>");
-	getData();
-	getSolarTimes();
+	$(document).on("click", "#changePassword", function() {
+		
+	});
+
+	$(document).on("click", "#newUserButton", function(event) {
+		event.preventDefault();
+		registerUser();
+	});
 });

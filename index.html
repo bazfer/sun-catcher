@@ -18,18 +18,39 @@
 <body>
 	<div class="page-header" id="loginStatus">
 	</div>
-	<div class="panel panel-primary" id="login">
+	<div class="panel panel-primary" id="newUser">
 		<div class="page-header">
-			<h1><small>Login</small></h1>
+			<h1><small>Register as a New User</small></h1>
 		</div>
 		<div class="panel-body">
 			<form role="form">
 				<div class="form-group">
-					<label for="search"></label>
+					<label for="search"><h5>Username</h5></label>
+					<input type="text" class="form-control" id="newUsername">
+				</div>
+				<div class="form-group">
+					<label for="search"><h5>Password</h5></label>
+					<input type="text" class="form-control" id="newPassword">
+				</div>
+				<button type="submit" class="btn btn-default" id="newUserButton">Submit</button>
+			</form>
+		</div>
+	</div>
+	<div class="panel panel-primary" id="login">
+		<div class="page-header">
+			<h1><small>Login as an Existing User</small></h1>
+		</div>
+		<div class="panel-body">
+			<form role="form">
+				<div class="form-group">
+					<label for="search"><h5>Username</h5></label>
 					<input type="text" class="form-control" id="username">
 				</div>
-
-				<button type="submit" class="btn btn-default" id="submitUsernameButton"></i>Submit</button>
+				<div class="form-group">
+					<label for="search"><h5>Password</h5></label>
+					<input type="text" class="form-control" id="password">
+				</div>
+				<button type="submit" class="btn btn-default" id="submitUsernameButton">Submit</button>
 			</form>
 		</div>
 	</div>
@@ -68,7 +89,7 @@
 		<div class="list-group-item" id="solar_noon"></div>
 		<div class="list-group-item" id="day_length"></div>
 		
-	 </div>
+	</div>
 	<!--JQUERY-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	 <!--MATERIALIZE JS -->

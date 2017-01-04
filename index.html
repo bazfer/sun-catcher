@@ -13,6 +13,10 @@
 	<!--CUSTOM CSS-->
 	<link rel="stylesheet" href="assets/styles/style.css">
 
+	<!--FIREBASE SNIPPET-->
+	<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+
+
 </head>
 
 <body>
@@ -20,12 +24,16 @@
 	</div>
 	<div class="panel panel-primary" id="newUser">
 		<div class="page-header">
-			<h1><small>Register as a New User</small></h1>
+			<h1><small>Register User</small></h1>
+			<div id="errorMessage1">
+				<h3><small></small></h3>
+			</div>
 		</div>
+		
 		<div class="panel-body">
 			<form role="form">
 				<div class="form-group">
-					<label for="search"><h5>Username</h5></label>
+					<label for="search"><h5>Email</h5></label>
 					<input type="text" class="form-control" id="newUsername">
 				</div>
 				<div class="form-group">
@@ -39,11 +47,14 @@
 	<div class="panel panel-primary" id="login">
 		<div class="page-header">
 			<h1><small>Login as an Existing User</small></h1>
+			<div id="errorMessage2">
+				<h3><small></small></h3>
+			</div>
 		</div>
 		<div class="panel-body">
 			<form role="form">
 				<div class="form-group">
-					<label for="search"><h5>Username</h5></label>
+					<label for="search"><h5>Email</h5></label>
 					<input type="text" class="form-control" id="username">
 				</div>
 				<div class="form-group">

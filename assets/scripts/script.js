@@ -1,12 +1,10 @@
-// common data among ajax calls - this will give us a natural existing connection between two APIs, 
-// rather than forcing it
-  // Initialize Firebase
+// Initialize Firebase
 var config = {
-apiKey: "AIzaSyCu_KaOTFf1ZdH-yamzF9okHFTYkXj-maI",
-authDomain: "project1-2ec2e.firebaseapp.com",
-databaseURL: "https://project1-2ec2e.firebaseio.com",
-storageBucket: "project1-2ec2e.appspot.com",
-messagingSenderId: "446413217477"
+	apiKey: "AIzaSyC-zjmCBUm3a5TqvcD4mwjS8-NG0J-OBYw",
+    authDomain: "test-7c7a2.firebaseapp.com",
+    databaseURL: "https://test-7c7a2.firebaseio.com",
+    storageBucket: "test-7c7a2.appspot.com",
+    messagingSenderId: "867493498100"
 };
 firebase.initializeApp(config);
 database = firebase.database();
@@ -17,6 +15,15 @@ var longitude = -97.7431;
 var date = "today";
 var currentUser;
 var password;
+
+
+
+
+function login() {
+	$("#newUser").hide();
+	$("#login").hide();
+	$("#loginStatus").html("<h3><small>You are currently logged in as: " + currentUser + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
+}
 
 function checkIfLoggedIn() {
 	currentUser = localStorage.getItem("user");
@@ -62,13 +69,7 @@ function getSolarTimes() {
 	});
 };
 
-function login() {
-	$("#newUser").hide();
-	$("#login").hide();
-	$("#loginStatus").html("<h3><small>You are currently logged in as: " + currentUser + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
-}
-
-function registerUser() {
+/* function registerUser() {
 	currentUser = $("#newUsername").val().trim();
 	password = $("#newPassword").val().trim();
 	database.ref('users/' + currentUser).set({
@@ -77,6 +78,94 @@ function registerUser() {
 	$("#newUsername").val("");
 	$("#newPassword").val("");
 	login();
+} */
+
+
+//CREATE USER PROVIDING EMAIL AND PASSWORD ** THIS VERSION USES FIREBASE AUTH FRAMEWORK **
+function registerUser() {
+	//grab data from html forms
+	currentUser = $("#newUsername").val().trim();
+	password = $("#newPassword").val().trim();
+	//using a middleman var to keep app working
+	var email = currentUser;
+
+	//call Firebase's create user method
+	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+  			// Handle Errors here.
+  			var errorCode = error.code;
+  			var errorMessage = error.message;
+  			
+  			if (errorCode == 'auth/weak-password') {
+  				// firebase demands passwords to be at least 6-characters long
+  				// WRITE CODE HERE if firebase throws back weak password error
+    			$('#errorMessage1').html("Password is too short.")
+  			} else if (errorCode == 'auth/email-already-in-use') {
+  				// WRITE CODE HERE if firebase throws email already in use
+  				$('errorMessage1').html("Email already used.")
+  			} else if (errorCode == 'auth/invalid-email') {
+  				// WRITE CODE HERE if firebase throws invalid email
+  				$('errorMessage1').html("Invalid email.")
+  			} else if (errorCode == 'auth/operation-not-allowed') {
+  				// WRITE CODE HERE if auth not enabled
+				$('errorMessage1').html("Auth not enabled.")
+  			} else {
+    			alert(errorMessage);
+  			}
+  			console.log(error);
+	});
+
+    //clear out html forms
+	$("#newUsername").val("");
+	$("#newPassword").val("");
+
+	// commenting out until password functionality working as desired
+	//login();
+}
+
+
+//LOG IN WITH EMAIL AND PASSWORD ** THIS VERSION USES FIREBASE AUTH FRAMEWORK **
+
+function submitCredentials() {
+	//grab data from html forms
+	currentUser = $("#username").val().trim();
+	password = $("#password").val().trim();
+
+	// ???
+	localStorage.setItem("user", currentUser);
+
+	//using a middleman var to keep app working
+	var email = currentUser;
+
+	//call Firebase's log in method
+	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  		// Handle Errors here.
+  		var errorCode = error.code;
+  		var errorMessage = error.message;
+  		if (errorCode == 'auth/wrong-password') {
+    		// WRITE CODE HERE if password is incorrect
+			$('errorMessage2').html("Incorrect password.")
+  		} else if (errorCode == 'auth/invalid-email') {
+			// WRITE CODE HERE if firebase throws invalid email
+  			$('errorMessage2').html("Invalid email.")
+  		} else if (errorCode == 'auth/user-disabled') {
+  			// WRITE CODE HERE if firebase throws disabled user
+  			$('errorMessage2').html("User has been disabled.")
+  		} else if (errorCode == 'auth/user-not-found') {
+  			// WRITE CODE HERE if firebase throws user not found
+  			$('errorMessage2').html("User not found.")
+  		} else {
+    		alert(errorMessage);
+  		}
+  		console.log(error);
+	});
+
+	$("#username").val("");
+	$("#password").val("");
+
+	//commenting out this code as it is throwing an error
+	/*if (data.currentUser) {
+		login();
+	}*/
 }
 
 function storeData() {
@@ -87,16 +176,7 @@ function storeData() {
 	})
 }
 
-function submitCredentials() {
-	currentUser = $("#username").val().trim();
-	password = $("#password").val().trim();
-	localStorage.setItem("user", currentUser);
-	$("#username").val("");
-	$("#password").val("");
-	if (data.currentUser) {
-		login();
-	}
-}
+
 
 function initAutocomplete() {
 	var map = new google.maps.Map(document.getElementById('map'), {

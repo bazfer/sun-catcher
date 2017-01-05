@@ -13,23 +13,28 @@ var googleAPIKey = "AIzaSyD-v-7mR5Rs0s1dGKX4pEbfvp6aImogy4E";
 var latitude = 30.2672; 
 var longitude = -97.7431;
 var date = "today";
-var currentUser;
+var email;
 var password;
 
 
 
 
 function login() {
-	$("#newUser").hide();
-	$("#login").hide();
-	$("#loginStatus").html("<h3><small>You are currently logged in as: " + currentUser + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
+
+
+	// hide user registration and user login
+	$("#loginPanel").hide();
+	
+
+	// display user status
+	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
 }
 
 function checkIfLoggedIn() {
-	currentUser = localStorage.getItem("user");
-	if (currentUser == null || currentUser == "null") {
+	email = localStorage.getItem("user");
+	if (email == null || email == "null") {
 		$("#loginStatus").html("<h3><small>You are currently not logged in.</small></h3>");
-		currentUser = "Guest";
+		email = "Guest";
 	} else {
 		login();
 	}
@@ -69,6 +74,8 @@ function getSolarTimes() {
 	});
 };
 
+
+// custom user/pass functionality -- setting aside to use firebase's framework
 /* function registerUser() {
 	currentUser = $("#newUsername").val().trim();
 	password = $("#newPassword").val().trim();
@@ -80,97 +87,101 @@ function getSolarTimes() {
 	login();
 } */
 
-
-//CREATE USER PROVIDING EMAIL AND PASSWORD ** THIS VERSION USES FIREBASE AUTH FRAMEWORK **
-function registerUser() {
-	//grab data from html forms
-	currentUser = $("#newUsername").val().trim();
-	password = $("#newPassword").val().trim();
-	//using a middleman var to keep app working
-	var email = currentUser;
-
-	//call Firebase's create user method
-	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-  			// Handle Errors here.
-  			var errorCode = error.code;
-  			var errorMessage = error.message;
-  			
-  			if (errorCode == 'auth/weak-password') {
-  				// firebase demands passwords to be at least 6-characters long
-  				// WRITE CODE HERE if firebase throws back weak password error
-    			$('#errorMessage1').html("Password is too short.")
-  			} else if (errorCode == 'auth/email-already-in-use') {
-  				// WRITE CODE HERE if firebase throws email already in use
-  				$('errorMessage1').html("Email already used.")
-  			} else if (errorCode == 'auth/invalid-email') {
-  				// WRITE CODE HERE if firebase throws invalid email
-  				$('errorMessage1').html("Invalid email.")
-  			} else if (errorCode == 'auth/operation-not-allowed') {
-  				// WRITE CODE HERE if auth not enabled
-				$('errorMessage1').html("Auth not enabled.")
-  			} else {
-    			alert(errorMessage);
-  			}
-  			console.log(error);
-	});
-
-    //clear out html forms
-	$("#newUsername").val("");
-	$("#newPassword").val("");
-
-	// commenting out until password functionality working as desired
-	//login();
-}
-
-
 //LOG IN WITH EMAIL AND PASSWORD ** THIS VERSION USES FIREBASE AUTH FRAMEWORK **
 
 function submitCredentials() {
+
+
 	//grab data from html forms
-	currentUser = $("#username").val().trim();
+	email = $("#email").val().trim();
 	password = $("#password").val().trim();
 
 	// ???
-	localStorage.setItem("user", currentUser);
+	localStorage.setItem("user", email);
 
-	//using a middleman var to keep app working
-	var email = currentUser;
-
-	//call Firebase's log in method
+	// code to handle errors thrown back by Firebase auth framework
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-  		// Handle Errors here.
+  		
+  		// catch errors
   		var errorCode = error.code;
   		var errorMessage = error.message;
+
+  		// handle errors
   		if (errorCode == 'auth/wrong-password') {
     		// WRITE CODE HERE if password is incorrect
-			$('errorMessage2').html("Incorrect password.")
+			$('#errorMessage').html("Incorrect password.");	
   		} else if (errorCode == 'auth/invalid-email') {
 			// WRITE CODE HERE if firebase throws invalid email
-  			$('errorMessage2').html("Invalid email.")
+  			$('#errorMessage').html("Invalid email.");
   		} else if (errorCode == 'auth/user-disabled') {
   			// WRITE CODE HERE if firebase throws disabled user
-  			$('errorMessage2').html("User has been disabled.")
+  			$('#errorMessage').html("User has been disabled.");
   		} else if (errorCode == 'auth/user-not-found') {
   			// WRITE CODE HERE if firebase throws user not found
-  			$('errorMessage2').html("User not found.")
+  			$('#errorMessage').html("User not found.");
   		} else {
     		alert(errorMessage);
   		}
-  		console.log(error);
+  		console.log(errorCode);
+  		$("#submitUsernameButton").prop("disabled", true);
 	});
+		
+	$("#submitUsernameButton").prop("disabled", false);
+	$("#submitUsernameButton").html("Sign Out");
 
-	$("#username").val("");
-	$("#password").val("");
-
-	//commenting out this code as it is throwing an error
+	// commenting out this code as it is throwing an error
 	/*if (data.currentUser) {
 		login();
 	}*/
 }
 
+
+//CREATE USER PROVIDING EMAIL AND PASSWORD ** THIS VERSION USES FIREBASE AUTH FRAMEWORK **
+
+function registerUser() {
+
+	// grab data from html forms
+	email = $("#email").val().trim();
+	password = $("#newPassword").val().trim();
+
+	// provide email and password to create user using firebase's framework
+	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+  		
+  		// catch errors
+  		var errorCode = error.code;
+  		var errorMessage = error.message;
+  			
+  		// handle errors	
+  		if (errorCode == 'auth/weak-password') {
+  			// firebase demands passwords to be at least 6-characters long
+  			// WRITE CODE HERE if firebase throws back weak password error
+    		$('#errorMessage').html("Password is too short.");
+  		} else if (errorCode == 'auth/email-already-in-use') {
+  			// WRITE CODE HERE if firebase throws email already in use
+  			$('#errorMessage').html("Email already used.");
+  		} else if (errorCode == 'auth/invalid-email') {
+  			// WRITE CODE HERE if firebase throws invalid email
+  			$('#errorMessage').html("Invalid email.");
+  		} else if (errorCode == 'auth/operation-not-allowed') {
+  			// WRITE CODE HERE if auth not enabled
+			$('#errorMessage').html("Auth not enabled.");
+  		} else {
+    		alert(errorMessage);
+  		}
+  		console.log(errorCode);
+	});
+
+	// clear out html forms
+	$("#newUsername").val("");
+	$("#newPassword").val("");	
+}
+
+
+
+
 function storeData() {
 	database.ref().push( {
-		user: currentUser,
+		user: email,
 		latitude: latitude,
 		longitude: longitude
 	})
@@ -249,11 +260,22 @@ function initAutocomplete() {
 	});
 }
 
-$(document).ready(function() {
+function initApp() {
 	checkIfLoggedIn();
 	getData();
 	getSolarTimes();
+	// listen for changes in the auth state
+	firebase.auth().onAuthStateChanged(function(user) {
+		if(user) {
+			// user signed in
+			$("#loginPanel").hide();
+			login();
+		} else {
+			// user signed out
+		}
+	});
 
+	// add event listeners to buttons
 	$(document).on("click", "#submitUsernameButton", function(event) {
 		event.preventDefault();
 		submitCredentials();
@@ -263,16 +285,19 @@ $(document).ready(function() {
 		localStorage.setItem("user", null);
 		checkIfLoggedIn();
 		$("#changeUserButton").remove();
-		$("#newUser").show();
-		$("#login").show();
+		$("#loginPanel").show();
 	});
 
 	$(document).on("click", "#changePassword", function() {
-		
+
 	});
 
 	$(document).on("click", "#newUserButton", function(event) {
 		event.preventDefault();
 		registerUser();
 	});
+}
+
+$(document).ready(function() {
+	initApp();
 });

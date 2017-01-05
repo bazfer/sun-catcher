@@ -32,7 +32,7 @@ function login() {
 }
 
 function changePassword() {
-	var user = firebase.auth().currentUser;
+	email = firebase.auth().currentUser;
 	var newPassword = getASecureRandomPassword();
 
 	user.updatePassword(newPassword).then(function() {
@@ -55,6 +55,7 @@ function checkIfLoggedIn() {
 function getData() {
 	database.ref().on("child_added", function(snapshot) {
 		var data = snapshot.val();
+		console.log(data);
 		if (data.user == email) {
 			$("#previousSearches").append("<tr><td>" + data.location + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>");
 		}
@@ -128,11 +129,9 @@ function submitCredentials() {
     		alert(errorMessage);
   		}
   		console.log(errorCode);
-  		$("#submitUsernameButton").prop("disabled", true);
 	});
 		
 	$("#submitUsernameButton").prop("disabled", false);
-	$("#submitUsernameButton").html("Sign Out");
 
 	// commenting out this code as it is throwing an error
 	/*if (data.currentUser) {
@@ -271,6 +270,7 @@ function initApp() {
 	checkIfLoggedIn();
 	getData();
 	getSolarTimes();
+	$("#setNewPassword").hide();
 	// listen for changes in the auth state
 	firebase.auth().onAuthStateChanged(function(user) {
 		if(user) {
@@ -306,7 +306,7 @@ function initApp() {
 	});
 
 	$(document).on("click", "#changePassword", function() {
-
+		$("#loginStatus").html("New Password: ");
 	});
 
 	$(document).on("click", "#newUserButton", function(event) {

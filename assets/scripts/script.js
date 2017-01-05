@@ -1,12 +1,12 @@
 // Initialize Firebase
-var config = {
-	apiKey: "AIzaSyC-zjmCBUm3a5TqvcD4mwjS8-NG0J-OBYw",
+ var config = {
+    apiKey: "AIzaSyC-zjmCBUm3a5TqvcD4mwjS8-NG0J-OBYw",
     authDomain: "test-7c7a2.firebaseapp.com",
     databaseURL: "https://test-7c7a2.firebaseio.com",
     storageBucket: "test-7c7a2.appspot.com",
     messagingSenderId: "867493498100"
-};
-firebase.initializeApp(config);
+  };
+  firebase.initializeApp(config);
 database = firebase.database();
 
 var googleAPIKey = "AIzaSyD-v-7mR5Rs0s1dGKX4pEbfvp6aImogy4E";
@@ -23,12 +23,18 @@ var placeName;
 function login() {
 
 
-	// hide user registration and user login
-	$("#loginPanel").hide();
-	 	
 
+
+	// hide user registration and user login
+	$("#login").hide();
+
+	// show user recent searches
+	$("#recent-searches").show();
+	 	
 	// display user status
 	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
+
+
 }
 
 function changePassword() {
@@ -45,7 +51,9 @@ function changePassword() {
 function checkIfLoggedIn() {
 	email = localStorage.getItem("user");
 	if (email == null || email == "null") {
-		$("#loginStatus").html("<h3><small>You are currently not logged in.</small></h3>");
+		$("#loginStatus").html("<h3><small>You are currently logged off<small></h3>");
+		$("#userSettings").hide();
+		$("#logout").hide();
 		email = "Guest";
 	} else {
 		login();
@@ -55,7 +63,7 @@ function checkIfLoggedIn() {
 function getData() {
 	database.ref().on("child_added", function(snapshot) {
 		var data = snapshot.val();
-		console.log(data);
+		
 		if (data.user == email) {
 			$("#previousSearches").append("<tr><td>" + data.location + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>");
 		}
@@ -98,7 +106,7 @@ function submitCredentials() {
 
 	//grab data from html forms
 	email = $("#email").val().trim();
-	password = $("#password").val().trim();
+	password = $("#pass").val().trim();
 
 	getData();
 
@@ -115,16 +123,16 @@ function submitCredentials() {
   		// handle errors
   		if (errorCode == 'auth/wrong-password') {
     		// WRITE CODE HERE if password is incorrect
-			$('#errorMessage').html("Incorrect password.");	
+			$('#loginStatus').html("Incorrect password.");	
   		} else if (errorCode == 'auth/invalid-email') {
 			// WRITE CODE HERE if firebase throws invalid email
-  			$('#errorMessage').html("Invalid email.");
+  			$('#loginStatus').html("Invalid email.");
   		} else if (errorCode == 'auth/user-disabled') {
   			// WRITE CODE HERE if firebase throws disabled user
-  			$('#errorMessage').html("User has been disabled.");
+  			$('#loginStatus').html("User has been disabled.");
   		} else if (errorCode == 'auth/user-not-found') {
   			// WRITE CODE HERE if firebase throws user not found
-  			$('#errorMessage').html("User not found.");
+  			$('#loginStatus').html("User not found.");
   		} else {
     		alert(errorMessage);
   		}
@@ -146,7 +154,10 @@ function registerUser() {
 
 	// grab data from html forms
 	email = $("#email").val().trim();
-	password = $("#password").val().trim();
+	password = $("#pass").val().trim();
+
+	console.log(email);
+	console.log(password);
 
 	// provide email and password to create user using firebase's framework
 	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
@@ -159,25 +170,26 @@ function registerUser() {
   		if (errorCode == 'auth/weak-password') {
   			// firebase demands passwords to be at least 6-characters long
   			// WRITE CODE HERE if firebase throws back weak password error
-    		$('#errorMessage').html("Password is too short.");
+    		$('#loginStatus').html("Password is too short.");
   		} else if (errorCode == 'auth/email-already-in-use') {
   			// WRITE CODE HERE if firebase throws email already in use
-  			$('#errorMessage').html("Email already used.");
+  			$('#loginStatus').html("Email already used.");
   		} else if (errorCode == 'auth/invalid-email') {
   			// WRITE CODE HERE if firebase throws invalid email
-  			$('#errorMessage').html("Invalid email.");
+  			$('#loginStatus').html("Invalid email.");
   		} else if (errorCode == 'auth/operation-not-allowed') {
   			// WRITE CODE HERE if auth not enabled
-			$('#errorMessage').html("Auth not enabled.");
+			$('#loginStatus').html("Auth not enabled.");
   		} else {
     		alert(errorMessage);
   		}
+  		console.log(password);
   		console.log(errorCode);
 	});
 
 	// clear out html forms
-	$("#newUsername").val("");
-	$("#newPassword").val("");	
+	//$("#email").val("");
+	//$("#pass").val("");	
 }
 
 
@@ -267,10 +279,17 @@ function initAutocomplete() {
 }
 
 function initApp() {
+	
+	// hiding logged-in content
+	$("#recent-searches").hide();
+	$("#setNewPassword").hide();
+
+	// checking if there's an active session in local storage
 	checkIfLoggedIn();
+
 	getData();
 	getSolarTimes();
-	$("#setNewPassword").hide();
+
 	// listen for changes in the auth state
 	firebase.auth().onAuthStateChanged(function(user) {
 		if(user) {
@@ -298,11 +317,20 @@ function initApp() {
 		});
 
 		$("#submitUsernameButton").html("Sign In");
-		$("#previousSearches").html("");
+	
+		// NEEDS TROUBLESHOOTING
 		localStorage.setItem("user", null);
 		checkIfLoggedIn();
+
+		// remove logout button
 		$("#changeUserButton").remove();
-		$("#loginPanel").show();
+		$("#logout").remove();
+
+		// hide recent searches
+		$("#recent-searches").hide();
+
+		// show login
+		$("#login").show();
 	});
 
 	$(document).on("click", "#changePassword", function() {

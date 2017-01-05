@@ -31,6 +31,17 @@ function login() {
 	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
 }
 
+function changePassword() {
+	var user = firebase.auth().currentUser;
+	var newPassword = getASecureRandomPassword();
+
+	user.updatePassword(newPassword).then(function() {
+	  // Update successful.
+	}, function(error) {
+	  // An error happened.
+	});
+}
+
 function checkIfLoggedIn() {
 	email = localStorage.getItem("user");
 	if (email == null || email == "null") {
@@ -44,8 +55,9 @@ function checkIfLoggedIn() {
 function getData() {
 	database.ref().on("child_added", function(snapshot) {
 		var data = snapshot.val();
-		console.log(data);
-		$("#previousSearches").append("<tr><td>" + data.location + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>")
+		if (data.user == email) {
+			$("#previousSearches").append("<tr><td>" + data.location + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>");
+		}
 	});
 }
 function getSolarTimes() {
@@ -86,6 +98,8 @@ function submitCredentials() {
 	//grab data from html forms
 	email = $("#email").val().trim();
 	password = $("#password").val().trim();
+
+	getData();
 
 	// ???
 	localStorage.setItem("user", email);
@@ -271,10 +285,20 @@ function initApp() {
 	// add event listeners to buttons
 	$(document).on("click", "#submitUsernameButton", function(event) {
 		event.preventDefault();
+		$("#previousSearches").html("");
 		submitCredentials();
 	});
 
 	$(document).on("click", "#changeUserButton", function() {
+
+		firebase.auth().signOut().then(function() {
+	  		// Sign-out successful.
+		}, function(error) {
+			// An error happened.
+		});
+
+		$("#submitUsernameButton").html("Sign In");
+		$("#previousSearches").html("");
 		localStorage.setItem("user", null);
 		checkIfLoggedIn();
 		$("#changeUserButton").remove();

@@ -20,37 +20,48 @@
 </head>
 
 <body>
-	<div class="page-header" id="loginStatus">
-	</div>
-
-	<div class="panel panel-primary" id="loginPanel">
-		<div class="page-header">
-			<h1><small>Sign In or Sign Up</small></h1>
-			<div id="errorMessage1">
-				<h3><small></small></h3>
-			</div>
+	<!--NAV BAR -->
+	<nav class = "light-blue lighten-4" role = "navigation">
+		<div class = "nav-wrapper container"><a id = "logo-container" href = "#" class = "brand-logo">Logo</a>
 		</div>
-		
-		<div class="panel-body">
-			<form role="form">
-				<div class="form-group">
-					<label for="search"><h5>Email</h5></label>
-					<input type="text" class="form-control" id="email">
-				</div>
-				<div class="form-group">
-					<label for="search"><h5>Password</h5></label>
-					<input type="text" class="form-control" id="password">
-				</div>
-				
-				<button type="submit" class="btn btn-default" id="submitUsernameButton">Sign In</button>
-				<button type="submit" class="btn btn-default" id="newUserButton">Sign Up</button>
-			</form>
-		</div>
+	</nav>
+	<!--MAIN-->
+	<div class = "container">
+		<div class = "row">
+			<div class = "col s12 m8">
+				<!--GOOGLE MAPS-->
+    			<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    			<div id="map"></div>
+    		</div>
+			<div class = "col s12 m4">
+				<div class = "page-header" id ="loginStatus"></div>
+				<div class="panel panel-primary" id="login">
+                    <div class="page-header">
+                        <h1>Sign In or Sign Up</h1>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="search"><h5>Email</h5></label>
+                                <input type="text" class="form-control" id="email">
+                            </div>
+                            <div class="form-group">
+                            	<label for="search"><h5>Password</h5></label>
+                                <input type="text" class="form-control" id="password">
+                            </div>
+                            <button type="submit" class="btn btn-default" id="submitUsernameButton">Sign In</button>
+							<button type="submit" class="btn btn-default" id="newUserButton">Sign Up</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 	
 	<div class="page-header">
 		<h1><small>Previously Searched Locations</small></h1>
 	</div>
+	
 	<div class="panel panel-primary">
 		<div class="panel-body">
 			<table class="table" id="previousSearches">
@@ -62,29 +73,25 @@
 			</table>
 		</div>
 	</div>
-	<!--GOOGLE MAPS-->
-	<div class="page-header">
-  		<h1><small>Google Maps</small></h1>
-	</div>
 
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <div id="map"></div>
-	
-	<!--SUNRISE SUNSET-->
-	<div class="page-header">
-  		<h1><small>Sunrise/Sunset (All Times Are Local)</small></h1>
-	</div>
-	<div class="panel panel-default">
-  		<div class="panel-heading"></div>
-  		<div class="panel-body"></div>
-
-		<div class="list-group-item" id="location"></div>	
-		<div class="list-group-item" id="sunrise"></div>
-		<div class="list-group-item" id="sunset"></div>
-		<div class="list-group-item" id="solar_noon"></div>
-		<div class="list-group-item" id="day_length"></div>
 		
-	</div>
+	
+		<!--SUNRISE SUNSET-->
+		<div class="page-header">
+  			<h1><small>Sunrise/Sunset (All Times Are Local)</small></h1>
+		</div>
+		<div class="panel panel-default">
+  			<div class="panel-heading"></div>
+  			<div class="panel-body"></div>
+
+			<div class="list-group-item" id="location"></div>	
+			<div class="list-group-item" id="sunrise"></div>
+			<div class="list-group-item" id="sunset"></div>
+			<div class="list-group-item" id="solar_noon"></div>
+			<div class="list-group-item" id="day_length"></div>
+		
+		</div>
+	
 	<!--JQUERY-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	 <!--MATERIALIZE JS -->

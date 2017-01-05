@@ -15,6 +15,7 @@ var longitude = -97.7431;
 var date = "today";
 var email;
 var password;
+var placeName;
 
 
 
@@ -24,7 +25,7 @@ function login() {
 
 	// hide user registration and user login
 	$("#loginPanel").hide();
-	
+	 	
 
 	// display user status
 	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
@@ -43,7 +44,8 @@ function checkIfLoggedIn() {
 function getData() {
 	database.ref().on("child_added", function(snapshot) {
 		var data = snapshot.val();
-		$("#previousSearches").append("<tr><td>" + data.user + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>")
+		console.log(data);
+		$("#previousSearches").append("<tr><td>" + data.location + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>")
 	});
 }
 function getSolarTimes() {
@@ -66,6 +68,7 @@ function getSolarTimes() {
 			var solar_noon = moment(moment(solarData.solar_noon, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
 			var day_length = solarData.day_length;
 
+			$("#location").html("Location: " + placeName);
 			$("#sunrise").html("Sunrise: " + sunrise);
 			$("#sunset").html("Sunset: " + sunset);
 			$("#solar_noon").html("Solar Noon: " + solar_noon);
@@ -74,18 +77,6 @@ function getSolarTimes() {
 	});
 };
 
-
-// custom user/pass functionality -- setting aside to use firebase's framework
-/* function registerUser() {
-	currentUser = $("#newUsername").val().trim();
-	password = $("#newPassword").val().trim();
-	database.ref('users/' + currentUser).set({
-		password: password
-	});
-	$("#newUsername").val("");
-	$("#newPassword").val("");
-	login();
-} */
 
 //LOG IN WITH EMAIL AND PASSWORD ** THIS VERSION USES FIREBASE AUTH FRAMEWORK **
 
@@ -142,7 +133,7 @@ function registerUser() {
 
 	// grab data from html forms
 	email = $("#email").val().trim();
-	password = $("#newPassword").val().trim();
+	password = $("#password").val().trim();
 
 	// provide email and password to create user using firebase's framework
 	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
@@ -183,7 +174,8 @@ function storeData() {
 	database.ref().push( {
 		user: email,
 		latitude: latitude,
-		longitude: longitude
+		longitude: longitude,
+		location: placeName
 	})
 }
 
@@ -225,6 +217,7 @@ function initAutocomplete() {
 		// For each place, get the icon, name and location.
 		var bounds = new google.maps.LatLngBounds();
 		places.forEach(function(place) {
+			placeName = place.name;
 			if (!place.geometry) {
 				console.log("Returned place contains no geometry");
 			return;

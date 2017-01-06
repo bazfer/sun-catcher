@@ -22,9 +22,6 @@ var placeName;
 
 function login() {
 
-
-
-
 	// hide user registration and user login
 	$("#login").hide();
 
@@ -32,12 +29,16 @@ function login() {
 	$("#recent-searches").show();
 	 	
 	// display user status
-	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email + "</small></h3><button id='changePassword'>Change Password</button><button id='changeUserButton'>Login as a Different User</button>");
+	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email);
 
 
 }
 
-function changePassword() {
+/* function changePassword() {
+	// hide user recent searches
+	$("#recent-searches").hide();
+	$("#setNewPassword").show();
+
 	email = firebase.auth().currentUser;
 	var newPassword = getASecureRandomPassword();
 
@@ -46,7 +47,7 @@ function changePassword() {
 	}, function(error) {
 	  // An error happened.
 	});
-}
+} */
 
 function checkIfLoggedIn() {
 	email = localStorage.getItem("user");
@@ -90,10 +91,10 @@ function getSolarTimes() {
 			var day_length = solarData.day_length;
 
 			$("#location").html("Location: " + placeName);
-			$("#sunrise").html("Sunrise: " + sunrise);
-			$("#sunset").html("Sunset: " + sunset);
-			$("#solar_noon").html("Solar Noon: " + solar_noon);
-			$("#day_length").html("Day Length: " + day_length);
+			$("#sunrise").html(sunrise);
+			$("#sunset").html(sunset);
+			$("#solar_noon").html(solar_noon);
+			$("#day_length").html(day_length);
 		});
 	});
 };
@@ -123,16 +124,16 @@ function submitCredentials() {
   		// handle errors
   		if (errorCode == 'auth/wrong-password') {
     		// WRITE CODE HERE if password is incorrect
-			$('#loginStatus').html("Incorrect password.");	
+			$('#errorMessage').html("Incorrect password.");	
   		} else if (errorCode == 'auth/invalid-email') {
 			// WRITE CODE HERE if firebase throws invalid email
-  			$('#loginStatus').html("Invalid email.");
+  			$('#errorMessage').html("Invalid email.");
   		} else if (errorCode == 'auth/user-disabled') {
   			// WRITE CODE HERE if firebase throws disabled user
-  			$('#loginStatus').html("User has been disabled.");
+  			$('#errorMessage').html("User has been disabled.");
   		} else if (errorCode == 'auth/user-not-found') {
   			// WRITE CODE HERE if firebase throws user not found
-  			$('#loginStatus').html("User not found.");
+  			$('#errorMessage').html("User not found.");
   		} else {
     		alert(errorMessage);
   		}
@@ -170,16 +171,16 @@ function registerUser() {
   		if (errorCode == 'auth/weak-password') {
   			// firebase demands passwords to be at least 6-characters long
   			// WRITE CODE HERE if firebase throws back weak password error
-    		$('#loginStatus').html("Password is too short.");
+    		$('#errorMessage').html("Password is too short.");
   		} else if (errorCode == 'auth/email-already-in-use') {
   			// WRITE CODE HERE if firebase throws email already in use
-  			$('#loginStatus').html("Email already used.");
+  			$('#errorMessage').html("Email already used.");
   		} else if (errorCode == 'auth/invalid-email') {
   			// WRITE CODE HERE if firebase throws invalid email
-  			$('#loginStatus').html("Invalid email.");
+  			$('#errorMessage').html("Invalid email.");
   		} else if (errorCode == 'auth/operation-not-allowed') {
   			// WRITE CODE HERE if auth not enabled
-			$('#loginStatus').html("Auth not enabled.");
+			$('#errorMessage').html("Auth not enabled.");
   		} else {
     		alert(errorMessage);
   		}
@@ -308,7 +309,7 @@ function initApp() {
 		submitCredentials();
 	});
 
-	$(document).on("click", "#changeUserButton", function() {
+	$(document).on("click", "#logout", function() {
 
 		firebase.auth().signOut().then(function() {
 	  		// Sign-out successful.
@@ -333,9 +334,10 @@ function initApp() {
 		$("#login").show();
 	});
 
-	$(document).on("click", "#changePassword", function() {
-		$("#loginStatus").html("New Password: ");
-	});
+	// killing this functionality due to time constraints
+	/* $(document).on("click", "#changePassword", function() {
+		changePassword();
+	}); */
 
 	$(document).on("click", "#newUserButton", function(event) {
 		event.preventDefault();

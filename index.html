@@ -29,7 +29,6 @@
 			<a id="logo-container" href="#" class="brand-logo">Logo</a>
 			<ul id="nav-mobile" class="right">
 				<li><span id="loginStatus" class="card-title"></span></li>
-				<li><a id="userSettings" href="#"><i class="material-icons">account_circle</i></a></li>
 				<li><a id="logout" href="#"><i class="material-icons">exit_to_app</i></a></li>
 			</ul>
 		</div>
@@ -51,16 +50,22 @@
                     	<span id="loginStatus" class="card-title"></span>
                     	<div class="panel-body">
                         	<form role="form">
-                            	<div class="form-group">
+                            	<div class="form-group login-element">
                                 	<label for="search"><h5>Email</h5></label>
                                 	<input type="text" class="form-control" id="email">
                            		</div>
-                            	<div class="form-group">
+                            	<div class="form-group login-element">
                             		<label for="search"><h5>Password</h5></label>
                                 	<input type="text" class="form-control" id="pass">
                             	</div>
-                            	<button type="submit" class="btn btn-default" id="submitUsernameButton">Sign In</button>
-								<button type="submit" class="btn btn-default" id="newUserButton">Sign Up</button>
+                            	<div class="custom-cont">
+                            		<button type="submit" class="btn btn-default btn-login" id="submitUsernameButton">Sign In</button>
+									<button type="submit" class="btn btn-default btn-login" id="newUserButton">Sign Up</button>
+								</div>
+
+								<div class="custom-cont">
+									<div id="errorMessage"></div>
+								</div>
                         	</form>
                     	</div>
                 	</div>
@@ -78,7 +83,7 @@
 						</div>
 					</div>
 					<!--CHANGE PASSWORD-->
-					<!--<div id="setNewPassword">
+					<!--<div id="changePassword">
 						<form role="form" >
 				        	<div class="form-group">
 				        		<label for="search"><h5>New Password</h5></label>
@@ -96,28 +101,32 @@
 		<!--SOLAR DATA-->
 		<div class="row">
 			<div class="col l8 offset-l2">
-				<div id="solar-data-container" class="panel panel-default">
-		  			<div class="panel-heading">
-		  				<h1>All Times Are Local</h1>
-		  			</div>
+				<div class="panel panel-default custom-cont">
 		  			<div class="panel-body" id="icons-container">
 						<div class="solar-container">
+							<span>sunrise</span>
 		  					<div class="solar-icon"><img src="assets/images/sunrise.png"></div>
 		  					<span id="sunrise"></span>
 		  				</div>
 		  				<div class="solar-container">
+		  					<span>solar noon</span>
 		  					<div class="solar-icon"><img src="assets/images/solar-noon.png"></div>
 		  					<span id="solar_noon"></span>
 		  				</div>
 		  				<div class="solar-container">
+		  					<span>sunset</span>
 		  					<div class="solar-icon"><img src="assets/images/sunset.png"></div>
 		  					<span id="sunset"></span>
 		  				</div>
 		  				<div class="solar-container">
+		  					<span>day length</span>
 		  					<div class="solar-icon"><img src="assets/images/solar-noon.png"></div>
 		  					<span id="day_length"></span>
 		  				</div>
 					</div>
+					<div >
+		  				<span id="local">All Times Are Local</span>
+		  			</div>
 				</div>
 			</div>
 		</div>

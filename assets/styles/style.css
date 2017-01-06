@@ -104,4 +104,10 @@ h1 {
 	margin-top: 18px;
 }
 
+.recentSearch {
+	background-color: yellow;
+}
 
+.recentSearch:hover {
+	background-color: red;
+}

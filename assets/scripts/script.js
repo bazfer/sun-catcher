@@ -16,7 +16,7 @@ var date = "today";
 var email;
 var password;
 var placeName;
-
+var previousResult;
 
 
 
@@ -31,6 +31,12 @@ function login() {
 	// display user status
 	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email);
 
+	// show logout button
+	$("#logout").show();
+
+	// clear out html forms
+	$("#email").val("");
+	$("#pass").val("");
 
 }
 
@@ -66,7 +72,13 @@ function getData() {
 		var data = snapshot.val();
 		
 		if (data.user == email) {
-			$("#previousSearches").append("<tr><td>" + data.location + "</td><td>" + data.latitude + "</td><td>" + data.longitude + "</td></tr>");
+			// limits significant digits showed in recent search box
+			var displayedLatitude = latitude.toPrecision(9);
+			var displayedLongitude = longitude.toPrecision(9);
+
+			var newRow = $("<tr class='recentSearch'><td>" + data.location + "</td><td>" + displayedLatitude + "</td><td>" + displayedLongitude + "</td></tr>");
+			newRow.attr("data-location", data.location).attr("data-latitude", data.latitude).attr("data-longitude", data.longitude);
+			$("#previousSearches").append(newRow);
 		}
 	});
 }
@@ -141,7 +153,6 @@ function submitCredentials() {
 	});
 		
 	$("#submitUsernameButton").prop("disabled", false);
-
 	// commenting out this code as it is throwing an error
 	/*if (data.currentUser) {
 		login();
@@ -157,9 +168,6 @@ function registerUser() {
 	email = $("#email").val().trim();
 	password = $("#pass").val().trim();
 
-	console.log(email);
-	console.log(password);
-
 	// provide email and password to create user using firebase's framework
 	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
   		
@@ -171,7 +179,7 @@ function registerUser() {
   		if (errorCode == 'auth/weak-password') {
   			// firebase demands passwords to be at least 6-characters long
   			// WRITE CODE HERE if firebase throws back weak password error
-    		$('#errorMessage').html("Password is too short.");
+    		$('#errorMessage').html("Password is too short. It must be at least 6 characters long.");
   		} else if (errorCode == 'auth/email-already-in-use') {
   			// WRITE CODE HERE if firebase throws email already in use
   			$('#errorMessage').html("Email already used.");
@@ -187,10 +195,6 @@ function registerUser() {
   		console.log(password);
   		console.log(errorCode);
 	});
-
-	// clear out html forms
-	//$("#email").val("");
-	//$("#pass").val("");	
 }
 
 
@@ -205,7 +209,36 @@ function storeData() {
 	})
 }
 
+function showPreviousResult() {
+	latitude = $(previousResult).data("latitude");
+	longitude = $(previousResult).data("longitude");
+	getSolarTimes();
 
+	var geocoder = new google.maps.Geocoder();
+    var address = $(previousResult).data("location");
+
+    geocoder.geocode({
+        'address': address
+    }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            // Center map on location
+            map.setCenter(results[0].geometry.location);
+            // Add marker on location
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        } else {
+            alert("Geocode was not successful for the following reason: " + status);
+        }
+    });
+
+	var map = new google.maps.Map(document.getElementById('map'), {
+	  center: {lat: latitude, lng: longitude},
+	  zoom: 13,
+	  mapTypeId: 'roadmap'
+	});
+}
 
 function initAutocomplete() {
 	var map = new google.maps.Map(document.getElementById('map'), {
@@ -298,7 +331,7 @@ function initApp() {
 			$("#loginPanel").hide();
 			login();
 		} else {
-			// user signed out
+			$("#logout").hide();
 		}
 	});
 
@@ -321,17 +354,20 @@ function initApp() {
 	
 		// NEEDS TROUBLESHOOTING
 		localStorage.setItem("user", null);
-		checkIfLoggedIn();
+		//checkIfLoggedIn();
 
 		// remove logout button
 		$("#changeUserButton").remove();
-		$("#logout").remove();
+		$("#logout").hide();
 
 		// hide recent searches
 		$("#recent-searches").hide();
 
 		// show login
 		$("#login").show();
+
+		// show status as logged out
+		$("#loginStatus").html("<h3><small>You are currently logged off<small></h3>");
 	});
 
 	// killing this functionality due to time constraints
@@ -342,6 +378,11 @@ function initApp() {
 	$(document).on("click", "#newUserButton", function(event) {
 		event.preventDefault();
 		registerUser();
+	});
+
+	$(document).on("click", ".recentSearch", function() {
+		previousResult = this;
+		showPreviousResult(previousResult);
 	});
 }
 

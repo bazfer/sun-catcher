@@ -73,8 +73,8 @@ function getData() {
 		
 		if (data.user == email) {
 			// limits significant digits showed in recent search box
-			var displayedLatitude = latitude.toPrecision(9);
-			var displayedLongitude = longitude.toPrecision(9);
+			var displayedLatitude = latitude.toPrecision(6);
+			var displayedLongitude = longitude.toPrecision(6);
 
 			var newRow = $("<tr class='recentSearch'><td>" + data.location + "</td><td>" + displayedLatitude + "</td><td>" + displayedLongitude + "</td></tr>");
 			newRow.attr("data-location", data.location).attr("data-latitude", data.latitude).attr("data-longitude", data.longitude);
@@ -136,16 +136,16 @@ function submitCredentials() {
   		// handle errors
   		if (errorCode == 'auth/wrong-password') {
     		// WRITE CODE HERE if password is incorrect
-			$('#errorMessage').html("Incorrect password.");	
+			$('#errorMessage').html("Incorrect password");	
   		} else if (errorCode == 'auth/invalid-email') {
 			// WRITE CODE HERE if firebase throws invalid email
-  			$('#errorMessage').html("Invalid email.");
+  			$('#errorMessage').html("Invalid email");
   		} else if (errorCode == 'auth/user-disabled') {
   			// WRITE CODE HERE if firebase throws disabled user
-  			$('#errorMessage').html("User has been disabled.");
+  			$('#errorMessage').html("User has been disabled");
   		} else if (errorCode == 'auth/user-not-found') {
   			// WRITE CODE HERE if firebase throws user not found
-  			$('#errorMessage').html("User not found.");
+  			$('#errorMessage').html("User not found");
   		} else {
     		alert(errorMessage);
   		}
@@ -179,16 +179,16 @@ function registerUser() {
   		if (errorCode == 'auth/weak-password') {
   			// firebase demands passwords to be at least 6-characters long
   			// WRITE CODE HERE if firebase throws back weak password error
-    		$('#errorMessage').html("Password is too short. It must be at least 6 characters long.");
+    		$('#errorMessage').html("Password must be six chars long");
   		} else if (errorCode == 'auth/email-already-in-use') {
   			// WRITE CODE HERE if firebase throws email already in use
-  			$('#errorMessage').html("Email already used.");
+  			$('#errorMessage').html("Email already in use");
   		} else if (errorCode == 'auth/invalid-email') {
   			// WRITE CODE HERE if firebase throws invalid email
-  			$('#errorMessage').html("Invalid email.");
+  			$('#errorMessage').html("Invalid email");
   		} else if (errorCode == 'auth/operation-not-allowed') {
   			// WRITE CODE HERE if auth not enabled
-			$('#errorMessage').html("Auth not enabled.");
+			$('#errorMessage').html("Auth not enabled");
   		} else {
     		alert(errorMessage);
   		}
@@ -197,9 +197,7 @@ function registerUser() {
 	});
 }
 
-
-
-
+// push data to firebase db
 function storeData() {
 	database.ref().push( {
 		user: email,
@@ -208,6 +206,7 @@ function storeData() {
 		location: placeName
 	})
 }
+
 
 function showPreviousResult() {
 	latitude = $(previousResult).data("latitude");
@@ -233,13 +232,18 @@ function showPreviousResult() {
         }
     });
 
+    
 	var map = new google.maps.Map(document.getElementById('map'), {
 	  center: {lat: latitude, lng: longitude},
 	  zoom: 13,
 	  mapTypeId: 'roadmap'
 	});
+
+	
+	
 }
 
+// google map
 function initAutocomplete() {
 	var map = new google.maps.Map(document.getElementById('map'), {
 	  center: {lat: 30.2672, lng: -97.7431},
@@ -312,6 +316,11 @@ function initAutocomplete() {
 	});
 }
 
+
+
+
+
+
 function initApp() {
 	
 	// hiding logged-in content
@@ -331,7 +340,8 @@ function initApp() {
 			$("#loginPanel").hide();
 			login();
 		} else {
-			$("#logout").hide();
+			// COMMENTING THIS OUT UNTIL WE FIX WEIRDNESS WITH LOCAL STORAGE
+			//$("#logout").hide();
 		}
 	});
 
@@ -342,6 +352,8 @@ function initApp() {
 		submitCredentials();
 	});
 
+
+    // logout
 	$(document).on("click", "#logout", function() {
 
 		firebase.auth().signOut().then(function() {

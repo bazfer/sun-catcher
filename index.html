@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 	<meta charset="UTF-8">
-	<title>Geoloc Sunrise Sunset</title>
+	<title>Sun Catcher</title>
 
 	<!-- MATERIALIZE CSS -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
@@ -17,7 +17,8 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
     rel="stylesheet">
 
-	
+	<!--VIEWPORTS-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
 </head>
@@ -28,7 +29,7 @@
 		<div class="nav-wrapper container">
 			<a id="logo-container" href="#" class="brand-logo">Logo</a>
 			<ul id="nav-mobile" class="right">
-				<li><span id="loginStatus" class="card-title"></span></li>
+				<li><div id="loginStatus" class="card-title"></div></li>
 				<li><a id="logout" href="#"><i class="material-icons">exit_to_app</i></a></li>
 			</ul>
 		</div>
@@ -37,19 +38,22 @@
 	<!--MAIN-->
 	<div class="container">
 		<div class="row">
-			<div class="col l8">
+			<div class="col l8 s12">
 				<!--GOOGLE MAPS-->
     			<input id="pac-input" class="controls" type="text" placeholder="Search Box">
     			<div id="map"></div>
     		</div>
-			<div class = "col l4">
+			<div class = "col l4 s12">
 				<div id="flipCard" class="card">
 					<!--scripts hides/shows content in this multi-function panel-->
 					<!--SIGN OR SIGN UP-->
 					<div id="login" class="card-content">
-                    	<span id="loginStatus" class="card-title"></span>
+                    	
                     	<div class="panel-body">
                         	<form role="form">
+                        	<div class="custom-cont">
+									<div id="errorMessage"></div>
+								</div>
                             	<div class="form-group login-element">
                                 	<label for="search"><h5>Email</h5></label>
                                 	<input type="text" class="form-control" id="email">
@@ -58,20 +62,19 @@
                             		<label for="search"><h5>Password</h5></label>
                                 	<input type="text" class="form-control" id="pass">
                             	</div>
+
                             	<div class="custom-cont">
                             		<button type="submit" class="btn btn-default btn-login" id="submitUsernameButton">Sign In</button>
 									<button type="submit" class="btn btn-default btn-login" id="newUserButton">Sign Up</button>
 								</div>
 
-								<div class="custom-cont">
-									<div id="errorMessage"></div>
-								</div>
+								
                         	</form>
                     	</div>
                 	</div>
 					<!--RECENT SEARCHES-->
 					<div id="recent-searches" class="card-content">
-						<span class="card-title">Recent Searches</span>
+						<div class="card-title" id="recent-searches-title"><small>Recent Searches</small></div>
 						<div class="panel-body">
 							<table class="table" id="previousSearches">
 								<tr>
@@ -96,30 +99,31 @@
 					
                 </div>
             </div>
+
         </div>
 		
 		<!--SOLAR DATA-->
 		<div class="row">
-			<div class="col l8 offset-l2">
-				<div class="panel panel-default custom-cont">
+			<div class="col l10 offset-l1 m10 offset-m1 s12">
+				<div class="panel panel-default custom-cont solar-data-con">
 		  			<div class="panel-body" id="icons-container">
 						<div class="solar-container">
-							<span>sunrise</span>
-		  					<div class="solar-icon"><img src="assets/images/sunrise.png"></div>
+							<span>Sunrise</span>
+		  					<div class="solar-icon"><img class="solar-png" src="assets/images/sunrise.png"></div>
 		  					<span id="sunrise"></span>
 		  				</div>
 		  				<div class="solar-container">
-		  					<span>solar noon</span>
+		  					<span>Solar Noon</span>
 		  					<div class="solar-icon"><img src="assets/images/solar-noon.png"></div>
 		  					<span id="solar_noon"></span>
 		  				</div>
 		  				<div class="solar-container">
-		  					<span>sunset</span>
+		  					<span>Sunset</span>
 		  					<div class="solar-icon"><img src="assets/images/sunset.png"></div>
 		  					<span id="sunset"></span>
 		  				</div>
 		  				<div class="solar-container">
-		  					<span>day length</span>
+		  					<span>Day Length</span>
 		  					<div class="solar-icon"><img src="assets/images/solar-noon.png"></div>
 		  					<span id="day_length"></span>
 		  				</div>

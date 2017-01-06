@@ -9,24 +9,26 @@ h1 {
 	font-size: 12px; 
 }
 
-/* MAP */
+
+
+/* NAV BAR */
+
+#logo-container{
+	left: 38px;
+}
+
+#loginStatus {
+margin-top: -2px;
+}
+
+/* GOOGLE MAPS */
 
 #map {
-	height: 500px;
+	height: 360px;
 	max-width: 100%;
 	border: solid white .5px;
 	margin-top: 36px;
-}
-
-/* FLIP CARD - HOUSES THE FOLLOWING ELEMENTS
-	SIGN IN OR SIGN UP
-	RECENT SEARCHES
-	PASSWORD RESET */
-
-#flipCard {
-	height: 500px;
-	margin-top: 36px;
-	margin-left: 33px;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 }
 
 .controls {
@@ -74,40 +76,129 @@ h1 {
 	width: 345px;
 }
 
+/* STRUCTURAL FROM MATERIALIZE */
+/* materialize panel */
+.custom-cont{
+	text-align: center;
+}
+
+/* SOLAR DATA PANEL */
+
+/* solar icon container */
 .solar-icon {
 	clear: right;
 }
 
+/* solar element (title-icon-time) container */
 .solar-container {
 	display: inline-block;
 	padding: 12px;
 }
 
-.custom-cont{
-	text-align: center;
-}
-
+/* solar data footnote */
 #local {
 	font-size: xx-small;
 }
 
+#solar-data-cont {
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+/* FLIPCARD */
+#flipCard {
+	height: 360px;
+	margin-top: 36px;
+	margin-right: 33px;
+
+}
+
+/* SIGN IN OR SIGN UP */
+
+input[type="text"] {
+	font-size: medium;
+}
+
+/* login button */
 .btn-login {
 	display: inline-block;
 	margin: 48px 12px;
 }
 
+/* login element container */
 .login-element {
-	margin: 24px 0px;
+	margin: 12px 0px;
 }
 
+/* error message */
 #errorMessage {
-	margin-top: 18px;
+	margin-top: -16px;
+	color: #777;
 }
 
+/* RECENT SEARCHES */
 .recentSearch {
-	background-color: yellow;
+	background-color: white;
 }
 
 .recentSearch:hover {
-	background-color: red;
+	background-color: #b3e5fc;
 }
+
+#recent-searches {
+	text-align: center;
+}
+
+#recent-searches-title{
+	display: inline-block;
+}
+
+#previousSearches {
+	border-top: none;
+}
+
+
+/* FOR MOBILE */
+@media only screen and (max-width: 992px) {
+
+
+	#flipCard {
+		
+		margin: 12px 0px;
+		height: 300px;
+	}
+
+	#map {
+		heigth: 360px;
+		margin-top: 12px;
+	}
+
+	#container {
+		margin: 36px 0px;
+	}
+
+	.solar-container {
+		display: inline-block;
+		padding: 0px;
+		margin-left: -12px;
+		margin-top:-6px;
+	}
+
+	.btn-login {
+		display: inline-block;
+		margin: 12px 12px;
+	}
+
+	.row {
+		margin-bottom: 0px;
+	}
+
+	#recent-searches-title {
+		margin-top: -12px;
+	}
+
+	.solar-icon {
+		margin-top: -12px;
+	}
+}
+
+

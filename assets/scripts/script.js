@@ -31,6 +31,9 @@ var icon;
 
 function login() {
 
+	// clear search history
+	$("#previousSearches").html("");
+
 	// store current email in local storage
 	localStorage.setItem("user", email);
 
@@ -85,14 +88,18 @@ function getData() {
 		
 		if (data.user == email) {
 			// limits significant digits showed in recent search box
+			latitude = data.latitude;
+			longitude = data.longitude;
+			placeName = data.location;
 			var displayedLatitude = data.latitude.toPrecision(6);
 			var displayedLongitude = data.longitude.toPrecision(6);
 
 			var newRow = $("<tr class='recentSearch'><td>" + data.location + "</td><td>" + displayedLatitude + "</td><td>" + displayedLongitude + "</td></tr>");
 			newRow.attr("data-location", data.location).attr("data-latitude", data.latitude).attr("data-longitude", data.longitude);
-			$("#previousSearches").append(newRow);
+			$("#previousSearches").prepend(newRow);
 		}
 	});
+	$("#previousSearches").prepend("<tr><th>Location</th><th>Latitude</th><th>Longitude</th></tr>");
 }
 function getSolarTimes() {
 
@@ -114,7 +121,7 @@ function getSolarTimes() {
 			var solar_noon = moment(moment(solarData.solar_noon, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
 			var day_length = solarData.day_length;
 
-			$("#location").html("Location: " + placeName);
+			$("#city-name").html(placeName);
 			$("#sunrise").html(sunrise);
 			$("#sunset").html(sunset);
 			$("#solar_noon").html(solar_noon);
@@ -134,8 +141,8 @@ function submitCredentials() {
 	password = $("#pass").val().trim();
 
 	getData();
-
-	// ???
+	getSolarTimes();
+	map.setCenter(new google.maps.LatLng(latitude, longitude));
 
 	// code to handle errors thrown back by Firebase auth framework
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -226,10 +233,10 @@ function showPreviousResult() {
 
 
 	var geocoder = new google.maps.Geocoder();
-    var address = $(previousResult).data("location");
+    placeName = $(previousResult).data("location");
 
     geocoder.geocode({
-        'address': address
+        'address': placeName
     }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             // Center map on location
@@ -243,9 +250,7 @@ function showPreviousResult() {
             alert("Geocode was not successful for the following reason: " + status);
         }
     });
-
 	map.setCenter(new google.maps.LatLng(latitude, longitude));
-
 }
 
 // google map

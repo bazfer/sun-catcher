@@ -42,7 +42,7 @@ function login() {
 	$("#recent-searches").show();
 	 	
 	// display user status
-	$("#loginStatus").html("<h3><small>You are currently logged in as: " + email);
+	$("#loginStatus").html("<h3><small>Logged in as: " + email);
 
 	// show logout button
 	$("#logout").show();
@@ -59,7 +59,7 @@ function login() {
 function checkIfLoggedIn() {
 	email = localStorage.getItem("user");
 	if (email == null || email == "null") {
-		$("#loginStatus").html("<h3><small>You are currently logged off<small></h3>");
+		$("#loginStatus").html("<h3><small>Not logged in<small></h3>");
 		$("#userSettings").hide();
 		$("#logout").hide();
 		email = null;
@@ -82,7 +82,7 @@ function getData() {
 
 			var newRow = $("<tr class='recentSearch'><td>" + data.location + "</td><td>" + displayedLatitude + "</td><td>" + displayedLongitude + "</td></tr>");
 			newRow.attr("data-location", data.location).attr("data-latitude", data.latitude).attr("data-longitude", data.longitude);
-			$("#previousSearches").prepend(newRow);
+			$("#previousSearches").append(newRow);
 		}
 	});
 	$("#previousSearches").prepend("<tr><th>Location</th><th>Latitude</th><th>Longitude</th></tr>");
@@ -130,12 +130,6 @@ function submitCredentials() {
 	//grab data from html forms
 	email = $("#email").val().trim();
 	password = $("#pass").val().trim();
-
-	/*
-	getData();
-	getSolarTimes();
-	map.setCenter(new google.maps.LatLng(latitude, longitude));
-	*/
 
 	// code to handle errors thrown back by Firebase auth framework
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -218,6 +212,33 @@ function storeData() {
 	})
 }
 
+function logout(){
+	firebase.auth().signOut().then(function() {
+  		// Sign-out successful.
+	}, function(error) {
+		// An error happened.
+	});
+
+	$("#submitUsernameButton").html("Sign In");
+
+	// NEEDS TROUBLESHOOTING
+	localStorage.setItem("user", null);
+	//checkIfLoggedIn();
+
+	// remove logout button
+	$("#changeUserButton").remove();
+	$("#logout").hide();
+
+	// hide recent searches
+	$("#recent-searches").hide();
+
+	// show login
+	$("#login").show();
+
+	// show status as logged out
+	$("#loginStatus").html("<h3><small>Not logged in<small></h3>");
+	initApp();
+}
 
 function showPreviousResult() {
 	latitude = $(previousResult).data("latitude");
@@ -320,11 +341,14 @@ function initAutocomplete() {
 }
 
 function initApp() {
-	$("#city-name").html("Austin");
+	latitude = 30.2672;
+	longitude = -97.7431;
+	placeName = "Austin";
+	$("#city-name").html(placeName);
 	// hiding logged-in content
 	$("#recent-searches").hide();
 	$("#setNewPassword").hide();
-
+	getSolarTimes();
 	// checking if there's an active session in local storage
 	checkIfLoggedIn();
 
@@ -348,37 +372,8 @@ function initApp() {
 
     // logout
 	$(document).on("click", "#logout", function() {
-
-		firebase.auth().signOut().then(function() {
-	  		// Sign-out successful.
-		}, function(error) {
-			// An error happened.
-		});
-
-		$("#submitUsernameButton").html("Sign In");
-	
-		// NEEDS TROUBLESHOOTING
-		localStorage.setItem("user", null);
-		//checkIfLoggedIn();
-
-		// remove logout button
-		$("#changeUserButton").remove();
-		$("#logout").hide();
-
-		// hide recent searches
-		$("#recent-searches").hide();
-
-		// show login
-		$("#login").show();
-
-		// show status as logged out
-		$("#loginStatus").html("<h3><small>You are currently logged off<small></h3>");
+		logout();
 	});
-
-	// killing this functionality due to time constraints
-	/* $(document).on("click", "#changePassword", function() {
-		changePassword();
-	}); */
 
 	$(document).on("click", "#newUserButton", function(event) {
 		event.preventDefault();

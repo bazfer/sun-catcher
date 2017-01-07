@@ -192,6 +192,10 @@ input[type="text"] {
 		margin: 36px 0px;
 	}
 
+	.brand-logo {
+		width: 150px;
+	}
+
 	.solar-container {
 		display: inline-block;
 		padding: 0px;

@@ -29,7 +29,7 @@
 	<!--NAV BAR -->
 	<nav class="light-blue lighten-4" role="navigation">
 		<div class="nav-wrapper container">
-			<a id="logo-container" href="index.html"><img  class="brand-logo" src="assets/images/logo.png"></a>
+			<a id="logo-container" href="index.html"><img  class="sun-logo" src="assets/images/logo.png"></a>
 			<ul id="nav-mobile" class="right">
 				<li><div id="loginStatus" class="card-title"></div></li>
 				<li><a id="logout" href="#"><i class="material-icons">exit_to_app</i></a></li>
@@ -77,9 +77,9 @@
 						<div class="panel-body" id="table-container">
 							<table class="table" id="previousSearches">
 								<tr>
-									<th>Location</th>
-									<th>Latitude</th>
-									<th>Longitude</th>
+									<th id="searches-columns">Location</th>
+									<th id="searches-columns">Latitude</th>
+									<th id="searches-columns">Longitude</th>
 								</tr>
 							</table>
 						</div>
@@ -90,7 +90,7 @@
 		
 		<!--SOLAR DATA-->
 		<div class="row">
-			<div class="col l10 offset-l1 m10 offset-m1 s12">
+			<div class="col l12 m12 s12">
 				<div class="panel panel-default custom-cont solar-data-cont">
 		  			<div class="panel-body" id="icons-container">
 			  			<div><h2>

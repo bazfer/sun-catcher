@@ -85,7 +85,7 @@ function getData() {
 			$("#previousSearches").append(newRow);
 		}
 	});
-	$("#previousSearches").prepend("<tr><th>Location</th><th>Latitude</th><th>Longitude</th></tr>");
+	$("#previousSearches").prepend("<tr><th class='searches-header'>Location</th><th class='searches-header'>Latitude</th><th class='searches-header'>Longitude</th></tr>");
 	map.setCenter(new google.maps.LatLng(latitude, longitude));
 }
 

@@ -12,7 +12,7 @@ h1 {
 
 
 /* NAV BAR */
-.brand-logo {
+.sun-logo {
 	width: 230px;
 }
 
@@ -128,7 +128,8 @@ input[type="text"] {
 /* login button */
 .btn-login {
 	display: inline-block;
-	margin: 48px 12px;
+	margin: 48px 6px;
+	margin-bottom: 6px;
 }
 
 /* login element container */
@@ -162,9 +163,10 @@ input[type="text"] {
 
 #previousSearches {
 	border-top: none;
-	/*height: 300px;
+	height: 300px;
 	overflow-y: scroll;
-	display: block;*/
+	display: block;
+	margin-bottom: 0px;
 }
 
 #table-container {
@@ -173,9 +175,34 @@ input[type="text"] {
 	padding: 0px;
 }
 
+
+
 /* FOR MOBILE */
 @media only screen and (max-width: 992px) {
 
+	/* NAV LOGO */
+	.sun-logo {
+		left: 19%;
+		width: 140px;
+	}
+
+	.searches-header {
+		padding: 100px;
+	}
+
+	#table-container {
+		text-align: center;
+	}
+
+	#previousSearches {
+	border-top: none;
+	height: 240px;
+	
+	width: 1000px;
+	
+	}
+
+	
 
 	#flipCard {
 		

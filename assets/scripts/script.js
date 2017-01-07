@@ -27,8 +27,6 @@ var places;
 var bounds;
 var icon;
 
-
-
 function login() {
 
 	// clear search history
@@ -57,19 +55,6 @@ function login() {
 	getData();
 	getSolarTimes();
 }
-
-/* function changePassword() {
-	// hide user recent searches
-	$("#recent-searches").hide();
-	$("#setNewPassword").show();
-	email = firebase.auth().currentUser;
-	var newPassword = getASecureRandomPassword();
-	user.updatePassword(newPassword).then(function() {
-	  // Update successful.
-	}, function(error) {
-	  // An error happened.
-	});
-} */
 
 function checkIfLoggedIn() {
 	email = localStorage.getItem("user");

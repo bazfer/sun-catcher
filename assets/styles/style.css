@@ -167,14 +167,11 @@ input[type="text"] {
 	display: block;*/
 }
 
-.panel-body {
+#table-container {
 	height: 270px;
 	overflow-y: auto;
 	padding: 0px;
 }
-
-
-
 
 /* FOR MOBILE */
 @media only screen and (max-width: 992px) {

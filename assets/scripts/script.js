@@ -18,6 +18,15 @@ var password;
 var placeName;
 var previousResult;
 
+// Google Maps global variables
+var map;
+var input;
+var searchBox;
+var markers;
+var places;
+var bounds;
+var icon;
+
 
 
 function login() {
@@ -76,8 +85,8 @@ function getData() {
 		
 		if (data.user == email) {
 			// limits significant digits showed in recent search box
-			var displayedLatitude = latitude.toPrecision(6);
-			var displayedLongitude = longitude.toPrecision(6);
+			var displayedLatitude = data.latitude.toPrecision(6);
+			var displayedLongitude = data.longitude.toPrecision(6);
 
 			var newRow = $("<tr class='recentSearch'><td>" + data.location + "</td><td>" + displayedLatitude + "</td><td>" + displayedLongitude + "</td></tr>");
 			newRow.attr("data-location", data.location).attr("data-latitude", data.latitude).attr("data-longitude", data.longitude);
@@ -215,6 +224,7 @@ function showPreviousResult() {
 	longitude = $(previousResult).data("longitude");
 	getSolarTimes();
 
+
 	var geocoder = new google.maps.Geocoder();
     var address = $(previousResult).data("location");
 
@@ -234,28 +244,21 @@ function showPreviousResult() {
         }
     });
 
-    
-	var map = new google.maps.Map(document.getElementById('map'), {
-	  center: {lat: latitude, lng: longitude},
-	  zoom: 13,
-	  mapTypeId: 'roadmap'
-	});
+	map.setCenter(new google.maps.LatLng(latitude, longitude));
 
-	
-	
 }
 
 // google map
 function initAutocomplete() {
-	var map = new google.maps.Map(document.getElementById('map'), {
+	map = new google.maps.Map(document.getElementById('map'), {
 	  center: {lat: 30.2672, lng: -97.7431},
 	  zoom: 13,
 	  mapTypeId: 'roadmap'
 	});
 
 	// Create the search box and link it to the UI element.
-	var input = document.getElementById('pac-input');
-	var searchBox = new google.maps.places.SearchBox(input);
+	input = document.getElementById('pac-input');
+	searchBox = new google.maps.places.SearchBox(input);
 	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
 	// Bias the SearchBox results towards current map's viewport.
@@ -263,11 +266,11 @@ function initAutocomplete() {
 		searchBox.setBounds(map.getBounds());
 	});
 
-	var markers = [];
+	markers = [];
 	// Listen for the event fired when the user selects a prediction and retrieve
 	// more details for that place.
 	searchBox.addListener('places_changed', function() {
-		var places = searchBox.getPlaces();
+		places = searchBox.getPlaces();
 
 		if (places.length == 0) {
 			return;
@@ -280,7 +283,7 @@ function initAutocomplete() {
 		markers = [];
 
 		// For each place, get the icon, name and location.
-		var bounds = new google.maps.LatLngBounds();
+		bounds = new google.maps.LatLngBounds();
 		places.forEach(function(place) {
 			placeName = place.name;
 			if (!place.geometry) {
@@ -291,7 +294,7 @@ function initAutocomplete() {
 			longitude = ((place.geometry.viewport.b.f + place.geometry.viewport.b.b)/2);
 			getSolarTimes();
 			storeData();
-			var icon = {
+			icon = {
 				url: place.icon,
 				size: new google.maps.Size(71, 71),
 				origin: new google.maps.Point(0, 0),
@@ -317,11 +320,6 @@ function initAutocomplete() {
 		map.fitBounds(bounds);
 	});
 }
-
-
-
-
-
 
 function initApp() {
 	

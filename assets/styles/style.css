@@ -95,6 +95,10 @@ margin-top: -2px;
 	padding: 12px;
 }
 
+#city-name, h1 {
+	font-family: Pacifico, Roboto;
+}
+
 /* solar data footnote */
 #local {
 	font-size: xx-small;
@@ -152,9 +156,21 @@ input[type="text"] {
 	display: inline-block;
 }
 
+
 #previousSearches {
 	border-top: none;
+	/*height: 300px;
+	overflow-y: scroll;
+	display: block;*/
 }
+
+.panel-body {
+	height: 270px;
+	overflow-y: auto;
+	padding: 0px;
+}
+
+
 
 
 /* FOR MOBILE */

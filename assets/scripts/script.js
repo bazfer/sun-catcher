@@ -22,6 +22,9 @@ var previousResult;
 
 function login() {
 
+	// store current email in local storage
+	localStorage.setItem("user", email);
+
 	// hide user registration and user login
 	$("#login").hide();
 
@@ -124,7 +127,6 @@ function submitCredentials() {
 	getData();
 
 	// ???
-	localStorage.setItem("user", email);
 
 	// code to handle errors thrown back by Firebase auth framework
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {

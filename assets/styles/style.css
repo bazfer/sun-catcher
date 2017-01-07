@@ -12,6 +12,9 @@ h1 {
 
 
 /* NAV BAR */
+.brand-logo {
+	width: 230px;
+}
 
 #logo-container{
 	left: 38px;

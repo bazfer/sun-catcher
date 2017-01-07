@@ -77,7 +77,7 @@ function checkIfLoggedIn() {
 		$("#loginStatus").html("<h3><small>You are currently logged off<small></h3>");
 		$("#userSettings").hide();
 		$("#logout").hide();
-		email = "Guest";
+		email = null;
 	} else {
 		//login();
 	}
@@ -101,6 +101,7 @@ function getData() {
 		}
 	});
 	$("#previousSearches").prepend("<tr><th>Location</th><th>Latitude</th><th>Longitude</th></tr>");
+	map.setCenter(new google.maps.LatLng(latitude, longitude));
 }
 
 function getSolarTimes() {
@@ -114,16 +115,19 @@ function getSolarTimes() {
 	$.ajax({ url: timezoneURL, method: "GET" }).done(function(response) {
 
 		var offset = (response.rawOffset + response.dstOffset)/3600;
+		var utcOffset = (moment().utcOffset())/60;
 
 		$.ajax({ url: solarQueryURL, method: "GET" }).done(function(response) {
 			var solarData = response.results;
 
+			var currentTime = moment().add((offset-utcOffset), "hours").format("hh:mm:ss A");
 			var sunrise = moment(moment(solarData.sunrise, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
 			var sunset = moment(moment(solarData.sunset, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
 			var solar_noon = moment(moment(solarData.solar_noon, "hh:mm:ss A")).add(offset, "hours").format("hh:mm:ss A");
 			var day_length = solarData.day_length;
 
 			$("#city-name").html(placeName);
+			$("#current-time").html(currentTime);
 			$("#sunrise").html(sunrise);
 			$("#sunset").html(sunset);
 			$("#solar_noon").html(solar_noon);
@@ -142,9 +146,11 @@ function submitCredentials() {
 	email = $("#email").val().trim();
 	password = $("#pass").val().trim();
 
+	/*
 	getData();
 	getSolarTimes();
 	map.setCenter(new google.maps.LatLng(latitude, longitude));
+	*/
 
 	// code to handle errors thrown back by Firebase auth framework
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -329,7 +335,7 @@ function initAutocomplete() {
 }
 
 function initApp() {
-	
+	$("#city-name").html("Austin");
 	// hiding logged-in content
 	$("#recent-searches").hide();
 	$("#setNewPassword").hide();

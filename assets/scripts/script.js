@@ -95,7 +95,7 @@ function getSolarTimes() {
 
 	timezoneURL = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude + "&timestamp=" + timestamp + "&key=" + googleAPIKey;
 
-	solarQueryURL = "http://api.sunrise-sunset.org/json?lat=" + latitude + "&lng=" + longitude + "&date=" + date;
+	solarQueryURL = "https://api.sunrise-sunset.org/json?lat=" + latitude + "&lng=" + longitude + "&date=" + date;
 
 	$.ajax({ url: timezoneURL, method: "GET" }).done(function(response) {
 

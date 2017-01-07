@@ -53,16 +53,17 @@ function login() {
 	$("#email").val("");
 	$("#pass").val("");
 
+	// update dashboard
+	getData();
+	getSolarTimes();
 }
 
 /* function changePassword() {
 	// hide user recent searches
 	$("#recent-searches").hide();
 	$("#setNewPassword").show();
-
 	email = firebase.auth().currentUser;
 	var newPassword = getASecureRandomPassword();
-
 	user.updatePassword(newPassword).then(function() {
 	  // Update successful.
 	}, function(error) {
@@ -78,7 +79,7 @@ function checkIfLoggedIn() {
 		$("#logout").hide();
 		email = "Guest";
 	} else {
-		login();
+		//login();
 	}
 }
 
@@ -101,6 +102,7 @@ function getData() {
 	});
 	$("#previousSearches").prepend("<tr><th>Location</th><th>Latitude</th><th>Longitude</th></tr>");
 }
+
 function getSolarTimes() {
 
 	var timestamp = moment().unix();
@@ -335,25 +337,20 @@ function initApp() {
 	// checking if there's an active session in local storage
 	checkIfLoggedIn();
 
-	getData();
-	getSolarTimes();
-
 	// listen for changes in the auth state
 	firebase.auth().onAuthStateChanged(function(user) {
 		if(user) {
 			// user signed in
-			$("#loginPanel").hide();
 			login();
 		} else {
-			// COMMENTING THIS OUT UNTIL WE FIX WEIRDNESS WITH LOCAL STORAGE
-			//$("#logout").hide();
+			getData();
+			getSolarTimes();
 		}
 	});
 
 	// add event listeners to buttons
 	$(document).on("click", "#submitUsernameButton", function(event) {
 		event.preventDefault();
-		$("#previousSearches").html("");
 		submitCredentials();
 	});
 
